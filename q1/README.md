@@ -127,19 +127,6 @@ route.route.openshift.io/nodejs-example   nodejs-example-q1.192.168.42.179.nip.i
      oc delete projcet q1
 
 
-## Question 2- In q2 namespace, create imagestream for nodejs and deploy https://github.com/sclorg/nodejs-ex 
-
-### Solution 2- 
-
-#### Step 1- oc login -u developer -p redhat
-
-#### Step 2- oc new-project q2 
-
-#### Step 3- oc new-app --name q2-nodeimage . --insecure-registry 
-
-#### Step 4- oc get svc , then oc expose svc , oc get route
-Crash fire loop
-
 
 
 
