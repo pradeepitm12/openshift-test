@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: q7-service
+  labels:
+    name: q7app
+spec:
+  type: NodePort
+  ports:
+    - port: 8080
+      nodePort: 31080
+  selector:
+    name: q7app
