@@ -1,0 +1,116 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  creationTimestamp: null
+  name: cakefun
+objects:
+- apiVersion: build.openshift.io/v1
+  kind: Build
+  metadata:
+    annotations:
+      openshift.io/build-config.name: cakephp-mysql-persistent
+      openshift.io/build.number: "1"
+      openshift.io/build.pod-name: cakephp-mysql-persistent-1-build
+    creationTimestamp: null
+    labels:
+      app: cakephp-mysql-persistent
+      buildconfig: cakephp-mysql-persistent
+      openshift.io/build-config.name: cakephp-mysql-persistent
+      openshift.io/build.start-policy: Serial
+      template: cakephp-mysql-persistent
+    name: cakephp-mysql-persistent-1
+    ownerReferences:
+    - apiVersion: build.openshift.io/v1
+      controller: true
+      kind: BuildConfig
+      name: cakephp-mysql-persistent
+      uid: bf6ad612-269f-11e9-84ee-525400e00413
+  spec:
+    nodeSelector: null
+    output:
+      pushSecret:
+        name: builder-dockercfg-dk85k
+      to:
+        kind: ImageStreamTag
+        name: cakephp-mysql-persistent:latest
+    postCommit:
+      script: ./vendor/bin/phpunit
+    resources: {}
+    revision:
+      git:
+        author:
+          email: hhorak@redhat.com
+          name: Honza Horak
+        commit: c1b7cdc5ff9bc1f04ef3a3bda896d9b1456e0204
+        committer:
+          email: noreply@github.com
+          name: GitHub
+        message: 'Merge pull request #107 from liangxia/url'
+      type: Git
+    serviceAccount: builder
+    source:
+      git:
+        uri: https://github.com/pradeepitm12/cakephp-ex
+      type: Git
+    strategy:
+      sourceStrategy:
+        env:
+        - name: COMPOSER_MIRROR
+        from:
+          kind: DockerImage
+          name: 172.30.1.1:5000/openshift/php@sha256:c57649d94a04b6df67aabd7a7643e533d6d5d72e488e9a8d297ae17aae200a15
+        pullSecret:
+          name: builder-dockercfg-dk85k
+      type: Source
+    triggeredBy:
+    - imageChangeBuild:
+        fromRef:
+          kind: ImageStreamTag
+          name: php:7.1
+          namespace: openshift
+        imageID: 172.30.1.1:5000/openshift/php@sha256:c57649d94a04b6df67aabd7a7643e533d6d5d72e488e9a8d297ae17aae200a15
+      message: Image change
+  status:
+    config:
+      name: cakephp-mysql-persistent
+    output:
+      to:
+        imageDigest: sha256:08b7832f9f69ba8bb0062b3c209f1679ff5c16015664266756322f99baa57028
+    outputDockerImageReference: 172.30.1.1:5000/q8/cakephp-mysql-persistent:latest
+    phase: New
+    stages:
+    - durationMilliseconds: 4787
+      name: FetchInputs
+      startTime: 2019-02-02T04:05:19Z
+      steps:
+      - durationMilliseconds: 4787
+        name: FetchGitSource
+        startTime: 2019-02-02T04:05:19Z
+    - durationMilliseconds: 2636
+      name: CommitContainer
+      startTime: 2019-02-02T04:07:41Z
+      steps:
+      - durationMilliseconds: 2636
+        name: CommitContainer
+        startTime: 2019-02-02T04:07:41Z
+    - durationMilliseconds: 137607
+      name: Assemble
+      startTime: 2019-02-02T04:05:27Z
+      steps:
+      - durationMilliseconds: 137607
+        name: AssembleBuildScripts
+        startTime: 2019-02-02T04:05:27Z
+    - durationMilliseconds: 733
+      name: PostCommit
+      startTime: 2019-02-02T04:07:44Z
+      steps:
+      - durationMilliseconds: 733
+        name: RunPostCommitHook
+        startTime: 2019-02-02T04:07:44Z
+    - durationMilliseconds: 2663
+      name: PushImage
+      startTime: 2019-02-02T04:07:45Z
+      steps:
+      - durationMilliseconds: 2663
+        name: PushImage
+        startTime: 2019-02-02T04:07:45Z

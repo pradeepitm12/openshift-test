@@ -1,0 +1,125 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  annotations:
+    description: Defines how to deploy the application server
+    openshift.io/generated-by: OpenShiftNewApp
+    template.alpha.openshift.io/wait-for-ready: "true"
+  creationTimestamp: null
+  generation: 1
+  labels:
+    app: cakephp-mysql-persistent
+    template: cakephp-mysql-persistent
+  name: cakephp-mysql-persistent
+  selfLink: /apis/apps.openshift.io/v1/namespaces/q8/deploymentconfigs/cakephp-mysql-persistent
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    name: cakephp-mysql-persistent
+  strategy:
+    activeDeadlineSeconds: 21600
+    recreateParams:
+      pre:
+        execNewPod:
+          command:
+          - ./migrate-database.sh
+          containerName: cakephp-mysql-persistent
+        failurePolicy: Retry
+      timeoutSeconds: 600
+    resources: {}
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        openshift.io/generated-by: OpenShiftNewApp
+      creationTimestamp: null
+      labels:
+        name: cakephp-mysql-persistent
+      name: cakephp-mysql-persistent
+    spec:
+      containers:
+      - env:
+        - name: DATABASE_SERVICE_NAME
+          value: mysql
+        - name: DATABASE_ENGINE
+          value: mysql
+        - name: DATABASE_NAME
+          value: default
+        - name: DATABASE_USER
+          valueFrom:
+            secretKeyRef:
+              key: database-user
+              name: cakephp-mysql-persistent
+        - name: DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: database-password
+              name: cakephp-mysql-persistent
+        - name: CAKEPHP_SECRET_TOKEN
+          valueFrom:
+            secretKeyRef:
+              key: cakephp-secret-token
+              name: cakephp-mysql-persistent
+        - name: CAKEPHP_SECURITY_SALT
+          valueFrom:
+            secretKeyRef:
+              key: cakephp-security-salt
+              name: cakephp-mysql-persistent
+        - name: OPCACHE_REVALIDATE_FREQ
+          value: "2"
+        image: 172.30.1.1:5000/q8/cakephp-mysql-persistent@sha256:08b7832f9f69ba8bb0062b3c209f1679ff5c16015664266756322f99baa57028
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /health.php
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 30
+          periodSeconds: 60
+          successThreshold: 1
+          timeoutSeconds: 3
+        name: cakephp-mysql-persistent
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /health.php
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 3
+          periodSeconds: 60
+          successThreshold: 1
+          timeoutSeconds: 3
+        resources:
+          limits:
+            memory: 512Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+  test: false
+  triggers:
+  - imageChangeParams:
+      automatic: true
+      containerNames:
+      - cakephp-mysql-persistent
+      from:
+        kind: ImageStreamTag
+        name: cakephp-mysql-persistent:latest
+        namespace: q8
+    type: ImageChange
+  - type: ConfigChange
+status:
+  availableReplicas: 0
+  latestVersion: 0
+  observedGeneration: 0
+  replicas: 0
+  unavailableReplicas: 0
+  updatedReplicas: 0

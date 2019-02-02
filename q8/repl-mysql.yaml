@@ -1,0 +1,108 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  annotations:
+    openshift.io/deployer-pod.completed-at: 2019-02-02 04:05:38 +0000 UTC
+    openshift.io/deployer-pod.created-at: 2019-02-02 04:05:17 +0000 UTC
+    openshift.io/deployer-pod.name: mysql-1-deploy
+    openshift.io/deployment-config.latest-version: "1"
+    openshift.io/deployment-config.name: mysql
+    openshift.io/deployment.phase: Complete
+    openshift.io/deployment.replicas: "1"
+    openshift.io/deployment.status-reason: config change
+    openshift.io/encoded-deployment-config: |
+      {"kind":"DeploymentConfig","apiVersion":"v1","metadata":{"name":"mysql","namespace":"q8","selfLink":"/apis/apps.openshift.io/v1/namespaces/q8/deploymentconfigs/mysql","uid":"bf73f082-269f-11e9-84ee-525400e00413","resourceVersion":"201583","generation":2,"creationTimestamp":"2019-02-02T04:05:16Z","labels":{"app":"cakephp-mysql-persistent","template":"cakephp-mysql-persistent"},"annotations":{"description":"Defines how to deploy the database","openshift.io/generated-by":"OpenShiftNewApp","template.alpha.openshift.io/wait-for-ready":"true"}},"spec":{"strategy":{"type":"Recreate","recreateParams":{"timeoutSeconds":600},"resources":{},"activeDeadlineSeconds":21600},"triggers":[{"type":"ImageChange","imageChangeParams":{"automatic":true,"containerNames":["mysql"],"from":{"kind":"ImageStreamTag","namespace":"openshift","name":"mysql:5.7"},"lastTriggeredImage":"172.30.1.1:5000/openshift/mysql@sha256:c8892784473c32078ea31da9cd00ac29557e05ca2a76bd6a774061287c1f41b7"}},{"type":"ConfigChange"}],"replicas":1,"revisionHistoryLimit":10,"test":false,"selector":{"name":"mysql"},"template":{"metadata":{"name":"mysql","creationTimestamp":null,"labels":{"name":"mysql"},"annotations":{"openshift.io/generated-by":"OpenShiftNewApp"}},"spec":{"volumes":[{"name":"mysql-data","persistentVolumeClaim":{"claimName":"mysql"}}],"containers":[{"name":"mysql","image":"172.30.1.1:5000/openshift/mysql@sha256:c8892784473c32078ea31da9cd00ac29557e05ca2a76bd6a774061287c1f41b7","ports":[{"containerPort":3306,"protocol":"TCP"}],"env":[{"name":"MYSQL_USER","valueFrom":{"secretKeyRef":{"name":"cakephp-mysql-persistent","key":"database-user"}}},{"name":"MYSQL_PASSWORD","valueFrom":{"secretKeyRef":{"name":"cakephp-mysql-persistent","key":"database-password"}}},{"name":"MYSQL_DATABASE","value":"default"}],"resources":{"limits":{"memory":"512Mi"}},"volumeMounts":[{"name":"mysql-data","mountPath":"/var/lib/mysql/data"}],"livenessProbe":{"tcpSocket":{"port":3306},"initialDelaySeconds":30,"timeoutSeconds":1,"periodSeconds":10,"successThreshold":1,"failureThreshold":3},"readinessProbe":{"exec":{"command":["/bin/sh","-i","-c","MYSQL_PWD='R7xNStJp4GgfM1wM' mysql -h 127.0.0.1 -u cakephp -D default -e 'SELECT 1'"]},"initialDelaySeconds":5,"timeoutSeconds":1,"periodSeconds":10,"successThreshold":1,"failureThreshold":3},"terminationMessagePath":"/dev/termination-log","terminationMessagePolicy":"File","imagePullPolicy":"IfNotPresent"}],"restartPolicy":"Always","terminationGracePeriodSeconds":30,"dnsPolicy":"ClusterFirst","securityContext":{},"schedulerName":"default-scheduler"}}},"status":{"latestVersion":1,"observedGeneration":0,"replicas":0,"updatedReplicas":0,"availableReplicas":0,"unavailableReplicas":0,"details":{"message":"config change","causes":[{"type":"ConfigChange"}]}}}
+  creationTimestamp: null
+  generation: 1
+  labels:
+    app: cakephp-mysql-persistent
+    openshift.io/deployment-config.name: mysql
+    template: cakephp-mysql-persistent
+  name: mysql-1
+  ownerReferences:
+  - apiVersion: apps.openshift.io/v1
+    blockOwnerDeletion: true
+    controller: true
+    kind: DeploymentConfig
+    name: mysql
+    uid: bf73f082-269f-11e9-84ee-525400e00413
+  selfLink: /api/v1/namespaces/q8/replicationcontrollers/mysql-1
+spec:
+  replicas: 1
+  selector:
+    deployment: mysql-1
+    deploymentconfig: mysql
+    name: mysql
+  template:
+    metadata:
+      annotations:
+        openshift.io/deployment-config.latest-version: "1"
+        openshift.io/deployment-config.name: mysql
+        openshift.io/deployment.name: mysql-1
+        openshift.io/generated-by: OpenShiftNewApp
+      creationTimestamp: null
+      labels:
+        deployment: mysql-1
+        deploymentconfig: mysql
+        name: mysql
+    spec:
+      containers:
+      - env:
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              key: database-user
+              name: cakephp-mysql-persistent
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: database-password
+              name: cakephp-mysql-persistent
+        - name: MYSQL_DATABASE
+          value: default
+        image: 172.30.1.1:5000/openshift/mysql@sha256:c8892784473c32078ea31da9cd00ac29557e05ca2a76bd6a774061287c1f41b7
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          tcpSocket:
+            port: 3306
+          timeoutSeconds: 1
+        name: mysql
+        ports:
+        - containerPort: 3306
+          protocol: TCP
+        readinessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -i
+            - -c
+            - MYSQL_PWD='R7xNStJp4GgfM1wM' mysql -h 127.0.0.1 -u cakephp -D default
+              -e 'SELECT 1'
+          failureThreshold: 3
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources:
+          limits:
+            memory: 512Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /var/lib/mysql/data
+          name: mysql-data
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: mysql-data
+        persistentVolumeClaim:
+          claimName: mysql
+status:
+  replicas: 0

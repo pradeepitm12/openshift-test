@@ -1,0 +1,116 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  annotations:
+    openshift.io/deployer-pod.completed-at: 2019-02-02 04:08:35 +0000 UTC
+    openshift.io/deployer-pod.created-at: 2019-02-02 04:07:48 +0000 UTC
+    openshift.io/deployer-pod.name: cakephp-mysql-persistent-1-deploy
+    openshift.io/deployment-config.latest-version: "1"
+    openshift.io/deployment-config.name: cakephp-mysql-persistent
+    openshift.io/deployment.phase: Complete
+    openshift.io/deployment.replicas: "1"
+    openshift.io/deployment.status-reason: config change
+    openshift.io/encoded-deployment-config: |
+      {"kind":"DeploymentConfig","apiVersion":"v1","metadata":{"name":"cakephp-mysql-persistent","namespace":"q8","selfLink":"/apis/apps.openshift.io/v1/namespaces/q8/deploymentconfigs/cakephp-mysql-persistent","uid":"bf6d1d76-269f-11e9-84ee-525400e00413","resourceVersion":"201927","generation":2,"creationTimestamp":"2019-02-02T04:05:16Z","labels":{"app":"cakephp-mysql-persistent","template":"cakephp-mysql-persistent"},"annotations":{"description":"Defines how to deploy the application server","openshift.io/generated-by":"OpenShiftNewApp","template.alpha.openshift.io/wait-for-ready":"true"}},"spec":{"strategy":{"type":"Recreate","recreateParams":{"timeoutSeconds":600,"pre":{"failurePolicy":"Retry","execNewPod":{"command":["./migrate-database.sh"],"containerName":"cakephp-mysql-persistent"}}},"resources":{},"activeDeadlineSeconds":21600},"triggers":[{"type":"ImageChange","imageChangeParams":{"automatic":true,"containerNames":["cakephp-mysql-persistent"],"from":{"kind":"ImageStreamTag","namespace":"q8","name":"cakephp-mysql-persistent:latest"},"lastTriggeredImage":"172.30.1.1:5000/q8/cakephp-mysql-persistent@sha256:08b7832f9f69ba8bb0062b3c209f1679ff5c16015664266756322f99baa57028"}},{"type":"ConfigChange"}],"replicas":1,"revisionHistoryLimit":10,"test":false,"selector":{"name":"cakephp-mysql-persistent"},"template":{"metadata":{"name":"cakephp-mysql-persistent","creationTimestamp":null,"labels":{"name":"cakephp-mysql-persistent"},"annotations":{"openshift.io/generated-by":"OpenShiftNewApp"}},"spec":{"containers":[{"name":"cakephp-mysql-persistent","image":"172.30.1.1:5000/q8/cakephp-mysql-persistent@sha256:08b7832f9f69ba8bb0062b3c209f1679ff5c16015664266756322f99baa57028","ports":[{"containerPort":8080,"protocol":"TCP"}],"env":[{"name":"DATABASE_SERVICE_NAME","value":"mysql"},{"name":"DATABASE_ENGINE","value":"mysql"},{"name":"DATABASE_NAME","value":"default"},{"name":"DATABASE_USER","valueFrom":{"secretKeyRef":{"name":"cakephp-mysql-persistent","key":"database-user"}}},{"name":"DATABASE_PASSWORD","valueFrom":{"secretKeyRef":{"name":"cakephp-mysql-persistent","key":"database-password"}}},{"name":"CAKEPHP_SECRET_TOKEN","valueFrom":{"secretKeyRef":{"name":"cakephp-mysql-persistent","key":"cakephp-secret-token"}}},{"name":"CAKEPHP_SECURITY_SALT","valueFrom":{"secretKeyRef":{"name":"cakephp-mysql-persistent","key":"cakephp-security-salt"}}},{"name":"OPCACHE_REVALIDATE_FREQ","value":"2"}],"resources":{"limits":{"memory":"512Mi"}},"livenessProbe":{"httpGet":{"path":"/health.php","port":8080,"scheme":"HTTP"},"initialDelaySeconds":30,"timeoutSeconds":3,"periodSeconds":60,"successThreshold":1,"failureThreshold":3},"readinessProbe":{"httpGet":{"path":"/health.php","port":8080,"scheme":"HTTP"},"initialDelaySeconds":3,"timeoutSeconds":3,"periodSeconds":60,"successThreshold":1,"failureThreshold":3},"terminationMessagePath":"/dev/termination-log","terminationMessagePolicy":"File","imagePullPolicy":"IfNotPresent"}],"restartPolicy":"Always","terminationGracePeriodSeconds":30,"dnsPolicy":"ClusterFirst","securityContext":{},"schedulerName":"default-scheduler"}}},"status":{"latestVersion":1,"observedGeneration":1,"replicas":0,"updatedReplicas":0,"availableReplicas":0,"unavailableReplicas":0,"details":{"message":"config change","causes":[{"type":"ConfigChange"}]},"conditions":[{"type":"Available","status":"False","lastUpdateTime":"2019-02-02T04:05:16Z","lastTransitionTime":"2019-02-02T04:05:16Z","message":"Deployment config does not have minimum availability."}]}}
+  creationTimestamp: null
+  generation: 1
+  labels:
+    app: cakephp-mysql-persistent
+    openshift.io/deployment-config.name: cakephp-mysql-persistent
+    template: cakephp-mysql-persistent
+  name: cakephp-mysql-persistent-1
+  ownerReferences:
+  - apiVersion: apps.openshift.io/v1
+    blockOwnerDeletion: true
+    controller: true
+    kind: DeploymentConfig
+    name: cakephp-mysql-persistent
+    uid: bf6d1d76-269f-11e9-84ee-525400e00413
+  selfLink: /api/v1/namespaces/q8/replicationcontrollers/cakephp-mysql-persistent-1
+spec:
+  replicas: 1
+  selector:
+    deployment: cakephp-mysql-persistent-1
+    deploymentconfig: cakephp-mysql-persistent
+    name: cakephp-mysql-persistent
+  template:
+    metadata:
+      annotations:
+        openshift.io/deployment-config.latest-version: "1"
+        openshift.io/deployment-config.name: cakephp-mysql-persistent
+        openshift.io/deployment.name: cakephp-mysql-persistent-1
+        openshift.io/generated-by: OpenShiftNewApp
+      creationTimestamp: null
+      labels:
+        deployment: cakephp-mysql-persistent-1
+        deploymentconfig: cakephp-mysql-persistent
+        name: cakephp-mysql-persistent
+    spec:
+      containers:
+      - env:
+        - name: DATABASE_SERVICE_NAME
+          value: mysql
+        - name: DATABASE_ENGINE
+          value: mysql
+        - name: DATABASE_NAME
+          value: default
+        - name: DATABASE_USER
+          valueFrom:
+            secretKeyRef:
+              key: database-user
+              name: cakephp-mysql-persistent
+        - name: DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: database-password
+              name: cakephp-mysql-persistent
+        - name: CAKEPHP_SECRET_TOKEN
+          valueFrom:
+            secretKeyRef:
+              key: cakephp-secret-token
+              name: cakephp-mysql-persistent
+        - name: CAKEPHP_SECURITY_SALT
+          valueFrom:
+            secretKeyRef:
+              key: cakephp-security-salt
+              name: cakephp-mysql-persistent
+        - name: OPCACHE_REVALIDATE_FREQ
+          value: "2"
+        image: 172.30.1.1:5000/q8/cakephp-mysql-persistent@sha256:08b7832f9f69ba8bb0062b3c209f1679ff5c16015664266756322f99baa57028
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /health.php
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 30
+          periodSeconds: 60
+          successThreshold: 1
+          timeoutSeconds: 3
+        name: cakephp-mysql-persistent
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /health.php
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 3
+          periodSeconds: 60
+          successThreshold: 1
+          timeoutSeconds: 3
+        resources:
+          limits:
+            memory: 512Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+status:
+  replicas: 0
