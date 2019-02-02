@@ -5,7 +5,8 @@
 Step 1- create an app 
 
             oc new-app --name q7app https://github.com/pradeepitm12/nodejs-hello-world
-Step 2- Write service file, reffer nodeport.yaml
+Step 2- Write service file, reffer nodeport.yaml 
+
             oc create -f nodeport.yaml
 
 Step 3- Expose the service 
