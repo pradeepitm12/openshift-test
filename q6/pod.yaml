@@ -8,17 +8,11 @@ spec:
   containers:
   - name: myapp-container
     image: busybox
-    command: ['sh', '-c', 'cat /file/config']
+    command: ['sh', '-c', 'cd file && echo "This is temp data" > data && sleep 1000']
     volumeMounts:
     - name: file
       mountPath: "/file"
-  initContainers:
-  - name: init-pod
-    image: busybox
-    command: ['sh', '-c', 'cd file && echo "config":"data" > config']
-    volumeMounts:
-    - name: file
-      mountPath: "/file"
+  restartPolicy: OnFailure
   volumes: 
   - name: file
     emptyDir: {}
