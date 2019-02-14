@@ -1,7 +1,7 @@
 
-## Question 3- In q2 namespace, create imagestream for nodejs and deploy https://github.com/sclorg/nodejs-ex 
+## Question 3- Create a pod and configmap (of some file), use configmap as a volume (logic of your choice)
 
-### Solution 2- 
+### Solution 3- 
 
 #### Step 1- oc login -u developer -p redhat
 
